@@ -14,7 +14,7 @@ class Plugin extends PluginBase
             'description' => 'The modern TipTap block editor & document builder for October CMS.',
             'author' => 'Amjad Iqbal',
             'icon' => 'icon-edit',
-            'homepage' => 'https://github.com/amjadiqbal/oc-blockcraft',
+            'homepage' => 'https://github.com/amjadiqbal/oc-blockcraft-plugin',
         ];
     }
 
