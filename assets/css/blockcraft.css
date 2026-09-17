@@ -1,0 +1,116 @@
+.blockcraft-editor {
+    border: 1px solid var(--field-border-color, #d8dde6);
+    border-radius: 4px;
+    background: var(--field-bg-color, #fff);
+    overflow: hidden;
+}
+
+.blockcraft-editor.is-readonly {
+    background: var(--field-disabled-bg-color, #f5f6f8);
+}
+
+.blockcraft-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--field-border-color, #d8dde6);
+    background: var(--field-toolbar-bg-color, #f9fafb);
+}
+
+.blockcraft-toolbar button {
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    cursor: pointer;
+    color: inherit;
+}
+
+.blockcraft-toolbar button:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.blockcraft-toolbar button.is-active {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.blockcraft-toolbar-sep {
+    width: 1px;
+    align-self: stretch;
+    background: var(--field-border-color, #d8dde6);
+    margin: 2px 4px;
+}
+
+.blockcraft-content {
+    padding: 12px 14px;
+    overflow-y: auto;
+}
+
+.blockcraft-content .ProseMirror {
+    outline: none;
+    min-height: inherit;
+}
+
+.blockcraft-content .ProseMirror p {
+    margin: 0 0 0.75em;
+}
+
+.blockcraft-content .ProseMirror table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0.75em 0;
+}
+
+.blockcraft-content .ProseMirror td,
+.blockcraft-content .ProseMirror th {
+    border: 1px solid var(--field-border-color, #d8dde6);
+    padding: 4px 8px;
+    vertical-align: top;
+    position: relative;
+}
+
+.blockcraft-content .ProseMirror th {
+    font-weight: 600;
+    background: var(--field-toolbar-bg-color, #f9fafb);
+}
+
+.blockcraft-content .ProseMirror blockquote {
+    border-left: 3px solid var(--field-border-color, #d8dde6);
+    margin: 0.75em 0;
+    padding-left: 1em;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.blockcraft-content .ProseMirror pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-radius: 4px;
+    padding: 0.75em 1em;
+    overflow-x: auto;
+}
+
+.blockcraft-content .ProseMirror img {
+    max-width: 100%;
+    height: auto;
+}
+
+.blockcraft-content .ProseMirror img.blockcraft-image-align-left {
+    float: left;
+    margin: 0 1em 0.5em 0;
+}
+
+.blockcraft-content .ProseMirror img.blockcraft-image-align-right {
+    float: right;
+    margin: 0 0 0.5em 1em;
+}
+
+.blockcraft-content .ProseMirror img.blockcraft-image-align-center {
+    display: block;
+    margin: 0.5em auto;
+}
