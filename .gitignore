@@ -1,0 +1,24 @@
+# Dependencies (never committed - see ../../../CLAUDE.md inherited rule #7)
+node_modules/
+vendor/
+
+# Vite build output - see README.md ("Why assets/dist/ is not committed") for the reasoning.
+assets/dist/
+
+# Vite caches
+.vite/
+**/.vite/
+
+# npm
+package-lock.json.bak
+npm-debug.log*
+
+# PHP/testing
+.phpunit.result.cache
+.phpunit.cache/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

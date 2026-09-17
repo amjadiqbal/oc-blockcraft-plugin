@@ -1,0 +1,37 @@
+{
+    "name": "amjadiqbal/blockcraft",
+    "type": "october-plugin",
+    "description": "The modern TipTap block editor & document builder for October CMS.",
+    "keywords": [
+        "october cms",
+        "tiptap",
+        "editor",
+        "form widget",
+        "backend",
+        "block editor"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amjad Iqbal",
+            "homepage": "https://github.com/amjadiqbal"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "composer/installers": "^1.0 || ^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AmjadIqbal\\BlockCraft\\": ""
+        }
+    },
+    "extra": {
+        "installer-name": "blockcraft"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
