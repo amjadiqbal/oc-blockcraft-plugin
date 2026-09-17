@@ -1,0 +1,87 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  typescript:
+    name: TypeScript & Vite build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  phpunit:
+    name: PHPUnit (against a real October CMS install)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: oc-blockcraft-plugin
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_sqlite, sqlite3, mbstring, curl, dom, fileinfo
+          coverage: none
+
+      # A plugin's PHPUnit suite needs October's own base test classes
+      # (PluginTestCase) and a full application skeleton to autoload real
+      # Backend\Classes\FormField / FormWidgetBase against - see README.md's
+      # Testing section for why.
+      - name: Install a throwaway October CMS app
+        run: composer create-project october/october octoberapp --no-interaction --prefer-dist
+
+      - name: Install this plugin into the throwaway app
+        run: |
+          mkdir -p octoberapp/plugins/amjadiqbal
+          rsync -a --exclude=node_modules --exclude=assets/dist --exclude=.git \
+            oc-blockcraft-plugin/ \
+            octoberapp/plugins/amjadiqbal/blockcraft/
+
+      - name: Configure SQLite
+        working-directory: octoberapp
+        run: |
+          mkdir -p storage
+          touch storage/database.sqlite
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i "s#^DB_DATABASE=.*#DB_DATABASE=$(pwd)/storage/database.sqlite#" .env
+
+      - name: Run migrations
+        working-directory: octoberapp
+        run: php artisan october:migrate --no-interaction
+
+      - name: Run BlockCraft's PHPUnit suite
+        working-directory: octoberapp
+        run: |
+          cat > phpunit.blockcraft.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <phpunit bootstrap="modules/system/tests/bootstrap.php" colors="true">
+              <testsuites>
+                  <testsuite name="BlockCraft">
+                      <directory>./plugins/amjadiqbal/blockcraft/tests</directory>
+                  </testsuite>
+              </testsuites>
+              <php>
+                  <env name="APP_ENV" value="testing" />
+                  <env name="CACHE_STORE" value="array" />
+                  <env name="SESSION_DRIVER" value="array" />
+                  <env name="ENABLE_CSRF" value="false" />
+                  <env name="DB_CONNECTION" value="sqlite" />
+                  <env name="DB_DATABASE" value=":memory:" />
+              </php>
+          </phpunit>
+          EOF
+          vendor/bin/phpunit --configuration phpunit.blockcraft.xml
