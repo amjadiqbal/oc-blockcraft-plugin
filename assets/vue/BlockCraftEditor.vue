@@ -151,6 +151,12 @@ async function insertImage(): Promise<void> {
 function setImageAlign(align: 'left' | 'center' | 'right'): void {
     editor.value?.chain().focus().updateAttributes('image', { align }).run();
 }
+
+// Exposed for the component-level test suite (tests/js/BlockCraftEditor.test.ts)
+// to drive real ProseMirror selections/commands directly, the same way a
+// consuming plugin's own extension code might reach into the editor via a
+// template ref - not part of the widget's documented public API.
+defineExpose({ editor });
 </script>
 
 <template>
