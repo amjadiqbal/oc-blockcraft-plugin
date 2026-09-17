@@ -75,7 +75,7 @@ class HtmlSanitizer
         // Wrap in a root element and force UTF-8 interpretation; suppress
         // warnings from libxml for intentionally-malformed input (a crafted
         // payload should degrade gracefully, not throw).
-        $wrapped = '<?xml encoding="utf-8"?><root>' . $html . '</root>';
+        $wrapped = '<?xml encoding="utf-8"?><root>' . $this->selfCloseVoidElements($html) . '</root>';
 
         $internalErrors = libxml_use_internal_errors(true);
         $loaded = $dom->loadHTML($wrapped, LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_HTML_NODEFDTD);
@@ -100,6 +100,37 @@ class HtmlSanitizer
         }
 
         return trim($output);
+    }
+
+    /**
+     * selfCloseVoidElements rewrites known HTML void elements (<img>, <br>,
+     * <embed>, etc.) to explicit self-closing form before parsing.
+     *
+     * DOMDocument's HTML parser (libxml) has no built-in notion of "void"
+     * elements when fed a fragment this way - an unclosed `<embed src="x">`
+     * is treated as an *opening* tag, so every sibling that follows it in
+     * the source (including a subsequent `<form>...</form><p>safe</p>`)
+     * gets parsed as its *children*. Since `sanitizeNode()` removes a
+     * dangerous element (`embed` is on that list) along with its entire
+     * subtree, that swallowed-but-actually-safe content was being deleted
+     * too - caught by HtmlSanitizerTest::testIframeObjectEmbedAndFormAreRemovedEntirely
+     * asserting "safe" on an empty string instead of finding it preserved.
+     */
+    protected function selfCloseVoidElements(string $html): string
+    {
+        static $voidTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+
+        $pattern = '#<(' . implode('|', $voidTags) . ')((?:[^>"\']|"[^"]*"|\'[^\']*\')*)>#i';
+
+        return preg_replace_callback($pattern, function (array $matches): string {
+            $inner = rtrim($matches[2]);
+
+            if (str_ends_with($inner, '/')) {
+                return $matches[0];
+            }
+
+            return '<' . $matches[1] . $inner . ' />';
+        }, $html);
     }
 
     /**
