@@ -4,6 +4,27 @@ All notable changes to this project are documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project uses [Semantic Versioning](https://semver.org/).
 
+## Distribution scope decision (2026-09-18, no version bump - no code changed)
+
+VueForge (the other plugin in this channel) had its October CMS Marketplace submission rejected
+under vendor `AmjadIqbal` - the registered Marketplace author code turned out to be `Amjad`. A
+rename to `Amjad\BlockCraft` / `amjad/blockcraft-plugin` was tried here too, then reverted at
+Amjad's explicit direction: **this plugin ships under `amjadiqbal` - the same identity as every
+other package in this portfolio (GitHub, Packagist, WordPress.org)** - not the Marketplace-specific
+`Amjad` author code.
+
+The real, confirmed tradeoff (read directly from October's own `PluginManager.php`, not assumed):
+the install directory's vendor segment and the plugin's PHP namespace have to match for October to
+load the plugin at all, and the Marketplace validates the plugin's *resolved* code against the
+registered author account. Keeping vendor `amjadiqbal` therefore means **this plugin is not
+eligible for an October CMS Marketplace listing under this account** - that is an accepted,
+deliberate scope decision, not an oversight. **Packagist and GitHub distribution are unaffected**
+- `amjadiqbal/blockcraft-plugin` was confirmed available on Packagist the entire time (a separate,
+unrelated package briefly existing under a different, coincidentally-similar vendor string
+(`amjad/lableb`) was never a real blocker - Packagist has no vendor-namespace reservation; an
+earlier local note claiming otherwise was wrong and has been removed, never having been pushed
+anywhere).
+
 ## [0.1.0] - 2026-09-18
 
 Initial build. Versioned `0.1.0` rather than `1.0.0` deliberately: this
