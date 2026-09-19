@@ -18,12 +18,18 @@ the install directory's vendor segment and the plugin's PHP namespace have to ma
 load the plugin at all, and the Marketplace validates the plugin's *resolved* code against the
 registered author account. Keeping vendor `amjadiqbal` therefore means **this plugin is not
 eligible for an October CMS Marketplace listing under this account** - that is an accepted,
-deliberate scope decision, not an oversight. **Packagist and GitHub distribution are unaffected**
-- `amjadiqbal/blockcraft-plugin` was confirmed available on Packagist the entire time (a separate,
-unrelated package briefly existing under a different, coincidentally-similar vendor string
-(`amjad/lableb`) was never a real blocker - Packagist has no vendor-namespace reservation; an
-earlier local note claiming otherwise was wrong and has been removed, never having been pushed
-anywhere).
+deliberate scope decision, not an oversight.
+
+**Packagist and GitHub distribution are unaffected, and genuinely straightforward here** -
+`amjadiqbal` is this account's own already-established Packagist vendor (existing packages:
+`alertify`, `laravel-tiptap`, etc.), so `amjadiqbal/blockcraft-plugin` has no naming conflict at
+all. (For the record, since this was a real point of confusion during this decision: Packagist
+*does* reserve vendor names once any package is published under them - confirmed from Packagist's
+own docs, "Vendor names on packagist are protected once a package with that name has been
+published... you can not publish packages with a vendor name that already exists on packagist
+without permission." That's exactly why the `amjad` vendor - a real, unrelated, pre-existing
+package `amjad/lableb` - would have been a genuine blocker had this plugin gone the other way and
+renamed to `Amjad`. It simply doesn't apply here, since `amjadiqbal` was never in question.)
 
 ## [0.1.0] - 2026-09-18
 
