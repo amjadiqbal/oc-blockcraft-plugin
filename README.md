@@ -1,11 +1,16 @@
 # BlockCraft
 
-**The modern TipTap block editor & document builder for October CMS.**
+![BlockCraft banner](art/banner.svg)
 
 A `FormWidget` (`blockcraft`) that replaces October's native Froala
 `richeditor` with a Vue 3 + [TipTap](https://tiptap.dev) block editor -
 clean HTML or structured JSON output, native Media Manager integration, and
 stable behavior inside nested Tailor/FormController repeaters.
+
+[![Tests](https://github.com/amjadiqbal/oc-blockcraft-plugin/actions/workflows/tests.yml/badge.svg)](https://github.com/amjadiqbal/oc-blockcraft-plugin/actions/workflows/tests.yml)
+[![Latest Version](https://img.shields.io/packagist/v/amjadiqbal/blockcraft-plugin.svg)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
+[![Total Downloads](https://img.shields.io/packagist/dt/amjadiqbal/blockcraft-plugin.svg)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
+[![License](https://img.shields.io/github/license/amjadiqbal/oc-blockcraft-plugin.svg)](LICENSE)
 
 ## Why
 
@@ -116,6 +121,35 @@ vendor/bin/phpunit --configuration path/to/phpunit.blockcraft.xml
 See `.github/workflows/tests.yml` for the exact, working invocation (this is
 literally the same script CI runs).
 
+## Support & Community
+
+### Custom Development
+[Hire me on Upwork](https://www.upwork.com/freelancers/amjadkhatri) for:
+- Package integration
+- Custom feature development
+- Technical consultation
+- Project implementation
+
+### Community Support
+- [Discord Community](https://discord.com/channels/1352854772859932702/1352854916690874388)
+- [GitHub Issues](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues)
+
+For priority support and enterprise solutions, please reach out via Upwork for direct assistance.
+
+## Changelog
+
+Please see [CHANGELOG.md](CHANGELOG.md) for details on what changed in each release.
+
+## Security
+
+If you discover a security vulnerability, reach out privately via [Discord](https://discord.com/channels/1352854772859932702/1352854916690874388) or [Upwork](https://www.upwork.com/freelancers/amjadkhatri) instead
+instead of opening a public issue. It will be addressed promptly.
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome - see
+[open issues](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues) or open a pull request.
+
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
