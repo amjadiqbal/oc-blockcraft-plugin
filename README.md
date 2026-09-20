@@ -142,8 +142,10 @@ Please see [CHANGELOG.md](CHANGELOG.md) for details on what changed in each rele
 
 ## Security
 
-If you discover a security vulnerability, reach out privately via [Discord](https://discord.com/channels/1352854772859932702/1352854916690874388) or [Upwork](https://www.upwork.com/freelancers/amjadkhatri) instead
-instead of opening a public issue. It will be addressed promptly.
+If you discover a security vulnerability, please reach out privately via
+[Discord](https://discord.com/channels/1352854772859932702/1352854916690874388) or
+[Upwork](https://www.upwork.com/freelancers/amjadkhatri) instead of opening a public issue. It
+will be addressed promptly.
 
 ## Contributing
 
