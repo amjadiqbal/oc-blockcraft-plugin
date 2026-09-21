@@ -22,7 +22,7 @@
     "@tiptap/extension-table": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^26.6.1",
     "@vitejs/plugin-vue": "^5.0.0",
     "@vue/test-utils": "^2.5.1",
     "jsdom": "^25.0.0",
