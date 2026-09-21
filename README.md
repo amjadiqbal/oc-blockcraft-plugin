@@ -1,16 +1,25 @@
-# BlockCraft
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/banner-dark.png">
+    <img alt="BlockCraft — the modern TipTap block editor for October CMS" src="art/banner-light.png" width="100%">
+  </picture>
+</p>
 
-![BlockCraft banner](art/banner.svg)
+# BlockCraft
 
 A `FormWidget` (`blockcraft`) that replaces October's native Froala
 `richeditor` with a Vue 3 + [TipTap](https://tiptap.dev) block editor -
 clean HTML or structured JSON output, native Media Manager integration, and
 stable behavior inside nested Tailor/FormController repeaters.
 
+[![Latest Version](https://img.shields.io/packagist/v/amjadiqbal/blockcraft-plugin.svg?style=flat-square)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
 [![Tests](https://github.com/amjadiqbal/oc-blockcraft-plugin/actions/workflows/tests.yml/badge.svg)](https://github.com/amjadiqbal/oc-blockcraft-plugin/actions/workflows/tests.yml)
-[![Latest Version](https://img.shields.io/packagist/v/amjadiqbal/blockcraft-plugin.svg)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
-[![Total Downloads](https://img.shields.io/packagist/dt/amjadiqbal/blockcraft-plugin.svg)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
-[![License](https://img.shields.io/github/license/amjadiqbal/oc-blockcraft-plugin.svg)](LICENSE)
+[![PHP Version](https://img.shields.io/packagist/php-v/amjadiqbal/blockcraft-plugin?style=flat-square)](https://packagist.org/packages/amjadiqbal/blockcraft-plugin)
+[![License](https://img.shields.io/packagist/l/amjadiqbal/blockcraft-plugin.svg?style=flat-square)](LICENSE.md)
+
+<p align="center">
+  <img src="art/screenshot.png" alt="BlockCraft's TipTap editor showing a heading, paragraph, bulleted feature list, and blockquote, live in a real October CMS backend form" width="500">
+</p>
 
 ## Why
 
@@ -121,37 +130,29 @@ vendor/bin/phpunit --configuration path/to/phpunit.blockcraft.xml
 See `.github/workflows/tests.yml` for the exact, working invocation (this is
 literally the same script CI runs).
 
-## Support & Community
-
-### Custom Development
-[Hire me on Upwork](https://www.upwork.com/freelancers/amjadkhatri) for:
-- Package integration
-- Custom feature development
-- Technical consultation
-- Project implementation
-
-### Community Support
-- [Discord Community](https://discord.com/channels/1352854772859932702/1352854916690874388)
-- [GitHub Issues](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues)
-
-For priority support and enterprise solutions, please reach out via Upwork for direct assistance.
-
-## Changelog
-
-Please see [CHANGELOG.md](CHANGELOG.md) for details on what changed in each release.
-
-## Security
-
-If you discover a security vulnerability, please reach out privately via
-[Discord](https://discord.com/channels/1352854772859932702/1352854916690874388) or
-[Upwork](https://www.upwork.com/freelancers/amjadkhatri) instead of opening a public issue. It
-will be addressed promptly.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome - see
-[open issues](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues) or open a pull request.
-
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT - see [LICENSE.md](LICENSE.md).
+
+## Support
+
+- 🐛 **Bug or feature request** — [open an issue](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues)
+- 💬 **Questions & community** — join the Discord (invite coming soon)
+- 🔒 **Security issue** — please report privately via GitHub's security tab
+
+## Need this customised, or something built?
+
+I'm available for custom development, package integration, and technical consulting.
+
+[![Hire me on Upwork](https://img.shields.io/badge/Hire%20me-Upwork-6FDA44?style=flat-square&logo=upwork&logoColor=white)](https://www.upwork.com/freelancers/amjadkhatri)
+
+## More packages
+
+Part of a family of open-source packages — see [all of them](https://github.com/amjadiqbal?tab=repositories).
+
+| | |
+|---|---|
+| [oc-vueforge-plugin](https://github.com/amjadiqbal/oc-vueforge-plugin) | The rapid Vue 3 component & widget engine for October CMS |
+| [laravel-tiptap](https://github.com/amjadiqbal/laravel-tiptap) | Tiptap editor for Laravel, backend-driven config and secure uploads |
+| [kiln](https://github.com/amjadiqbal/kiln) | Deploy-time OPcache control for Laravel |
+| [laravel-logpulse](https://github.com/amjadiqbal/laravel-logpulse) | Log health monitoring & intelligent alerting for Laravel |
