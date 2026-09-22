@@ -137,6 +137,18 @@ function init(): void {
     // Turbo-driven backend navigation (no hard reload) fires this once the
     // new body is in place.
     document.addEventListener('page:updated', () => hydrateAll());
+
+    // `ajax:update-complete` does NOT fire for every AJAX-driven DOM change -
+    // confirmed the hard way against October's own repeater "Add Item"
+    // action, whose response is handled entirely through Larajax's
+    // ops-based `patchDom`/`loadAssets` path (`handleUpdateOperations()`),
+    // which never calls the framework's `notifyApplicationUpdateComplete()`.
+    // A new repeater row's BlockCraft mount point landed in the DOM but was
+    // never hydrated. `ajax:done` fires for every completed AJAX request
+    // regardless of path, so re-scanning on it closes the gap. Safe to call
+    // unconditionally: `mountWidget()` already guards against double-mounting
+    // via `mountedInstances`, so this is a no-op for anything already mounted.
+    document.addEventListener('ajax:done', () => hydrateAll());
 }
 
 if (document.readyState === 'loading') {

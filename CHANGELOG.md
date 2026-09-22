@@ -4,6 +4,52 @@ All notable changes to this project are documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project uses [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-09-22
+
+### Fixed
+
+- **A BlockCraft field added dynamically inside a repeater row never
+  initialized.** The `assets/js/blockcraft.ts` hydrator only re-scanned the
+  DOM for new mount points on two events, `ajax:update-complete` and
+  `page:updated`. Neither fires for October's native repeater "Add Item"
+  action - confirmed by instrumenting every Larajax lifecycle event on a
+  live page before clicking "Add Item": only `ajax:request-complete`,
+  `ajax:done`, and `ajax:always` fired. Traced the root cause in Larajax's
+  own source (`vendor/larajax/larajax/resources/src/request/actions.js`):
+  the repeater's successful response is handled entirely through Larajax's
+  ops-based `patchDom`/`loadAssets` path (`handleUpdateOperations()`), which
+  never calls the function that dispatches `ajax:update-complete`
+  (`notifyApplicationUpdateComplete()`, only called from the separate
+  `handleUpdateResponse()` path). The new mount point genuinely landed in
+  the DOM - confirmed directly from the real AJAX response body - but was
+  never hydrated. Manually dispatching `ajax:update-complete` on the broken
+  page immediately mounted the pending editor, confirming the hydration
+  logic itself was correct and only its trigger coverage was incomplete.
+
+  Fixed by also listening for `ajax:done`, which fires for every completed
+  AJAX request regardless of response shape. Safe to call `hydrateAll()`
+  unconditionally on it: `mountWidget()` already guards against
+  double-mounting via its own `mountedInstances` map, so a re-scan on every
+  AJAX completion is a no-op for anything already mounted (confirmed
+  negligible in practice - ~0.01ms per scan with 2 widgets on a form).
+  Confirmed the fix does not affect the existing removal path (the
+  `MutationObserver` cleanup, unrelated to this event and unaffected by it)
+  by adding and removing repeater rows in the same session.
+
+  This directly affects the "stable behavior inside nested Tailor/
+  FormController repeaters" claim in `README.md` - true only for removal
+  and for rows present at page load before this fix; now true for rows
+  added dynamically as well, verified with a real backend login: added a
+  repeater row, typed into its nested editor, saved, reloaded, and
+  confirmed the content round-tripped correctly from the database.
+
+  New Vitest coverage (`tests/js/blockcraft.test.ts`) exercises this exact
+  scenario directly against the hydrator module - a mount point appearing
+  in the DOM outside of the module's own initial `hydrateAll()` call,
+  followed by an `ajax:done` dispatch - rather than mocking October's AJAX
+  framework. No test previously covered this path, which is how the bug
+  reached a public README claim in the first place.
+
 ## Marketplace pricing decision (2026-09-22, no version bump - no code changed)
 
 **Price: Free.** Decided by Amjad, not a default. Per this channel's `ACCOUNT-STRATEGY.md`, this

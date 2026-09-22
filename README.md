@@ -95,11 +95,17 @@ throws and never reaches the database unsanitized.
 
 ## Repeater lifecycle
 
-BlockCraft's ESM hydrator (`assets/js/blockcraft.ts`) watches for its mount
-elements being removed from the DOM (a Tailor/FormController repeater row
-deleted) and destroys the corresponding TipTap/Vue instance via a
-`MutationObserver` - this prevents the memory leaks and detached event
-listeners a naive integration would accumulate as rows are added and removed.
+BlockCraft's ESM hydrator (`assets/js/blockcraft.ts`) re-scans the DOM for
+new mount points on every completed backend AJAX request (`ajax:done`), so
+a BlockCraft field added dynamically inside a repeater row - via October's
+native "Add Item" action - gets its editor initialized correctly, not just
+one present when the page first loaded.
+
+It also watches for its mount elements being removed from the DOM (a
+Tailor/FormController repeater row deleted) and destroys the corresponding
+TipTap/Vue instance via a `MutationObserver` - this prevents the memory
+leaks and detached event listeners a naive integration would accumulate as
+rows are added and removed.
 
 ## Development
 
