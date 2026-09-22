@@ -137,7 +137,7 @@ MIT - see [LICENSE.md](LICENSE.md).
 ## Support
 
 - 🐛 **Bug or feature request** — [open an issue](https://github.com/amjadiqbal/oc-blockcraft-plugin/issues)
-- 💬 **Questions & community** — join the Discord (invite coming soon)
+- 💬 **Questions** — [contact me on Discord](https://discord.com/users/412244229520359434)
 - 🔒 **Security issue** — please report privately via GitHub's security tab
 
 ## Need this customised, or something built?
@@ -145,6 +145,8 @@ MIT - see [LICENSE.md](LICENSE.md).
 I'm available for custom development, package integration, and technical consulting.
 
 [![Hire me on Upwork](https://img.shields.io/badge/Hire%20me-Upwork-6FDA44?style=flat-square&logo=upwork&logoColor=white)](https://www.upwork.com/freelancers/amjadkhatri)
+
+Or [reach me directly on Discord](https://discord.com/users/412244229520359434).
 
 ## More packages
 
