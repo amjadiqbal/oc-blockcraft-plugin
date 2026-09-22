@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project uses [Semantic Versioning](https://semver.org/).
 
+## Marketplace pricing decision (2026-09-22, no version bump - no code changed)
+
+**Price: Free.** Decided by Amjad, not a default. Per this channel's `ACCOUNT-STRATEGY.md`, this
+is Amjad's personal identity, where the goal is reputation and portfolio reach rather than direct
+revenue from a small developer-tooling plugin - the same reasoning already applied to VueForge.
+BlockCraft is small enough that Marketplace/Packagist distribution itself is the value, and it
+feeds the consulting funnel this account is built around, matching
+`GITHUB-REPO-STANDARD.md` §6's "free when it feeds the consulting funnel" criterion directly.
+
+## Marketplace eligibility resolved (2026-09-22, no version bump - no code changed)
+
+The identity fork described immediately below is closed: Amjad changed the account's registered
+October Marketplace author code to `AmjadIqbal`, which now matches this plugin's existing plugin
+code (`AmjadIqbal.BlockCraft`) exactly. Nothing renamed - this plugin was already on the correct
+side of that fork by virtue of the distribution-scope decision below. It is now genuinely
+Marketplace-eligible; the "not eligible under this account" line in the decision below is
+superseded but left in place as the historical record of why the fork existed at all.
+
 ## Distribution scope decision (2026-09-18, no version bump - no code changed)
 
 VueForge (the other plugin in this channel) had its October CMS Marketplace submission rejected
