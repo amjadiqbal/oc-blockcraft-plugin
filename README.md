@@ -145,8 +145,7 @@ MIT - see [LICENSE.md](LICENSE.md).
 I'm available for custom development, package integration, and technical consulting.
 
 [![Hire me on Upwork](https://img.shields.io/badge/Hire%20me-Upwork-6FDA44?style=flat-square&logo=upwork&logoColor=white)](https://www.upwork.com/freelancers/amjadkhatri)
-
-Or [reach me directly on Discord](https://discord.com/users/412244229520359434).
+[![Discord](https://img.shields.io/badge/Discord-Message%20me-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/users/412244229520359434)
 
 ## More packages
 
