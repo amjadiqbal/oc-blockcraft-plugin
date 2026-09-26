@@ -10,7 +10,7 @@ jobs:
     name: TypeScript & Vite build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v5
         with:
@@ -27,7 +27,7 @@ jobs:
     name: PHPUnit (against a real October CMS install)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           path: oc-blockcraft-plugin
 
