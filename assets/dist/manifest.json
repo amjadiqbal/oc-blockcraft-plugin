@@ -1,0 +1,11 @@
+{
+  "assets/js/blockcraft.ts": {
+    "file": "assets/blockcraft-DF1EFNf1.js",
+    "name": "blockcraft",
+    "src": "assets/js/blockcraft.ts",
+    "isEntry": true,
+    "css": [
+      "assets/blockcraft-3pniA0Uz.css"
+    ]
+  }
+}

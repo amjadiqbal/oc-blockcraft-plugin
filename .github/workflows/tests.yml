@@ -23,6 +23,13 @@ jobs:
       - run: npm test
       - run: npm run build
 
+      # assets/dist is committed because installs have no build step. A stale
+      # or missing build would ship broken, so the committed copy must match.
+      - name: Committed assets/dist matches a fresh build
+        run: |
+          git status --porcelain -- assets/dist
+          test -z "$(git status --porcelain -- assets/dist)"
+
   phpunit:
     name: PHPUnit (against a real October CMS install)
     runs-on: ubuntu-latest
@@ -44,12 +51,15 @@ jobs:
       - name: Install a throwaway October CMS app
         run: composer create-project october/october octoberapp --no-interaction --prefer-dist
 
-      - name: Install this plugin into the throwaway app
+      # Install from `git archive`, not the checkout: it honours .gitattributes
+      # export-ignore, so this is exactly what Packagist ships to customers.
+      # Only tests/ (export-ignored) is copied in separately to run them.
+      - name: Install this plugin into the throwaway app, as shipped
         run: |
-          mkdir -p octoberapp/plugins/amjadiqbal
-          rsync -a --exclude=node_modules --exclude=assets/dist --exclude=.git \
-            oc-blockcraft-plugin/ \
-            octoberapp/plugins/amjadiqbal/blockcraft/
+          mkdir -p octoberapp/plugins/amjadiqbal/blockcraft
+          git -C oc-blockcraft-plugin archive HEAD | tar -x -C octoberapp/plugins/amjadiqbal/blockcraft
+          test -f octoberapp/plugins/amjadiqbal/blockcraft/assets/dist/manifest.json
+          cp -R oc-blockcraft-plugin/tests octoberapp/plugins/amjadiqbal/blockcraft/tests
 
       - name: Configure SQLite
         working-directory: octoberapp

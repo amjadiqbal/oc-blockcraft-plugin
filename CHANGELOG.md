@@ -4,6 +4,30 @@ All notable changes to this project are documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project uses [Semantic Versioning](https://semver.org/).
 
+## [0.1.2] - 2026-10-10
+
+### Fixed
+
+- **Every install of 0.1.0 and 0.1.1 failed as soon as the field rendered**,
+  with `BlockCraft: Vite manifest not found at ".../assets/dist/.vite/manifest.json"`.
+  The compiled editor (`assets/dist/`) was gitignored, so it was never part of
+  the GitHub/Packagist package, and Composer installs run no build step. It
+  went unnoticed because every test environment had a locally built copy, and
+  no test rendered the widget. Reported by a user who swapped a `richeditor`
+  field for `blockcraft`.
+
+  - `assets/dist/` is now committed and ships with the package. No build step.
+  - The manifest moved from `assets/dist/.vite/manifest.json` to
+    `assets/dist/manifest.json`. Hidden folders are often dropped when a
+    plugin is uploaded to shared hosting over FTP or as a zip.
+  - New PHPUnit test renders the widget and asserts every JS/CSS file it
+    registers exists on disk.
+  - CI now installs the plugin from `git archive` - exactly what Packagist
+    ships - instead of the working copy, and fails if the committed
+    `assets/dist/` differs from a fresh build.
+
+  If you're on 0.1.0 or 0.1.1: `composer update amjadiqbal/blockcraft-plugin`.
+
 ## [0.1.1] - 2026-09-22
 
 ### Fixed
