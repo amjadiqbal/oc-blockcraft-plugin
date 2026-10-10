@@ -44,6 +44,9 @@ composer require amjadiqbal/blockcraft-plugin
 (Composer package name ends in `-plugin` per October's own naming
 convention; it still installs at `plugins/amjadiqbal/blockcraft`.)
 
+No build step is needed - the compiled editor ships in `assets/dist/`. If you
+upload the plugin manually (FTP, zip), make sure that folder comes with it.
+
 ## Usage
 
 ```yaml

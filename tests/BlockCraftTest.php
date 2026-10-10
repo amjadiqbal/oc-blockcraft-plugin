@@ -166,4 +166,28 @@ class BlockCraftTest extends PluginTestCase
 
         $this->assertSame('', $widget->getSaveValue(''));
     }
+
+    /**
+     * Renders the widget the way a real backend form does and checks every
+     * JS/CSS file it registers exists on disk. v0.1.0/v0.1.1 shipped without
+     * assets/dist, so this threw "Vite manifest not found" on every customer
+     * install while every other test passed.
+     */
+    public function testRenderRegistersBuiltAssetsThatExistOnDisk()
+    {
+        $widget = $this->makeWidget();
+
+        $html = $widget->render();
+
+        $this->assertStringContainsString('data-control="blockcraft"', $html);
+
+        $assets = $widget->getAssetPaths();
+        $this->assertNotEmpty($assets['js'] ?? [], 'render() registered no JavaScript');
+        $this->assertNotEmpty($assets['css'] ?? [], 'render() registered no CSS');
+
+        foreach (array_merge($assets['js'], $assets['css']) as $url) {
+            $relative = strtok(preg_replace('#^/plugins/#', '', $url), '?');
+            $this->assertFileExists(plugins_path($relative), "Asset registered by render() is missing: {$url}");
+        }
+    }
 }

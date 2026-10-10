@@ -2,8 +2,9 @@
 node_modules/
 vendor/
 
-# Vite build output - see README.md ("Why assets/dist/ is not committed") for the reasoning.
-assets/dist/
+# assets/dist/ (the Vite build) IS committed on purpose: Composer/Packagist and
+# the October Marketplace install straight from the repo with no build step, so
+# a plugin without it fails on every customer install. CI fails if it's stale.
 
 # Vite caches
 .vite/
