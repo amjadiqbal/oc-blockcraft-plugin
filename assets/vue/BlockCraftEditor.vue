@@ -171,16 +171,40 @@ function setImageAlign(align: ImageAlign): void {
     editor.value?.chain().focus().updateAttributes('image', { align: next }).run();
 }
 
+// What's typed in the alt/width boxes lives in these drafts, not in a
+// `:value` bound to the image. The bar re-renders a couple of frames after
+// every editor transaction (@tiptap/vue-3 publishes state that way), and a
+// bound `:value` would be reset to the image's current value mid-typing - so
+// e.g. a width typed right after changing the alt text was lost. A draft is
+// only refreshed from the image while its box isn't focused.
+const altInput = ref<HTMLInputElement | null>(null);
+const widthInput = ref<HTMLInputElement | null>(null);
+const altDraft = ref('');
+const widthDraft = ref('');
+
+watch(
+    () => [imageSelected.value, imageAttrs.value.src, imageAttrs.value.alt, imageAttrs.value.width],
+    () => {
+        if (document.activeElement !== altInput.value) {
+            altDraft.value = imageAttrs.value.alt ?? '';
+        }
+        if (document.activeElement !== widthInput.value) {
+            widthDraft.value = imageAttrs.value.width == null ? '' : String(imageAttrs.value.width);
+        }
+    },
+    { immediate: true },
+);
+
 // The alt/width inputs take focus away from the editor, so these update the
 // still-selected image without calling focus() (which would steal it back).
-function setImageAlt(event: Event): void {
-    const alt = (event.target as HTMLInputElement).value.trim();
+function setImageAlt(): void {
+    const alt = altDraft.value.trim();
 
     editor.value?.chain().updateAttributes('image', { alt: alt === '' ? null : alt }).run();
 }
 
-function setImageWidth(event: Event): void {
-    const raw = (event.target as HTMLInputElement).value.trim();
+function setImageWidth(): void {
+    const raw = String(widthDraft.value).trim();
     const width = /^\d{1,5}$/.test(raw) && Number(raw) > 0 ? Number(raw) : null;
 
     editor.value?.chain().updateAttributes('image', { width, height: null }).run();
@@ -364,11 +388,11 @@ defineExpose({ editor, sourceMode });
             <span class="blockcraft-contextbar-label">Image</span>
             <label class="blockcraft-contextbar-field">
                 Alt text
-                <input type="text" :value="imageAttrs.alt ?? ''" placeholder="Describe the image" @change="setImageAlt">
+                <input ref="altInput" v-model="altDraft" type="text" placeholder="Describe the image" @change="setImageAlt">
             </label>
             <label class="blockcraft-contextbar-field">
                 Width
-                <input type="number" min="1" step="1" class="is-narrow" :value="imageAttrs.width ?? ''" placeholder="auto" @change="setImageWidth">
+                <input ref="widthInput" v-model="widthDraft" type="number" min="1" step="1" class="is-narrow" placeholder="auto" @change="setImageWidth">
                 px
             </label>
             <span class="blockcraft-toolbar-sep"></span>

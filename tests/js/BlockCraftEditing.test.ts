@@ -28,7 +28,10 @@ if (!Range.prototype.getBoundingClientRect) {
 }
 
 async function settle(): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    // Wait for the same two frames TipTap waits for (not a fixed delay, which
+    // is flaky when the whole suite runs in parallel), then Vue's re-render.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     await nextTick();
 }
 
@@ -274,6 +277,31 @@ describe('BlockCraftEditor editing controls', () => {
             await widthInput.setValue('');
             await widthInput.trigger('change');
             expect(lastEmitted(wrapper)).not.toContain('width=');
+
+            wrapper.unmount();
+            expect(consoleError).not.toHaveBeenCalled();
+        });
+
+        it('keeps a width being typed when the bar re-renders after the alt text changed', async () => {
+            const wrapper = mount(BlockCraftEditor, { props: { modelValue: IMAGE }, attachTo: document.body });
+            const editor = await waitForEditor(wrapper);
+
+            selectFirstImage(editor);
+            await settle();
+
+            const [altInput, widthInput] = wrapper.find('[aria-label="Image"]').findAll('input');
+            await altInput.setValue('Alt first');
+            await altInput.trigger('change');
+
+            // Start typing the width before the re-render from the alt change lands.
+            (widthInput.element as HTMLInputElement).focus();
+            await widthInput.setValue('240');
+            await settle();
+            expect((widthInput.element as HTMLInputElement).value).toBe('240');
+
+            await widthInput.trigger('change');
+            expect(lastEmitted(wrapper)).toContain('alt="Alt first"');
+            expect(lastEmitted(wrapper)).toContain('width="240"');
 
             wrapper.unmount();
             expect(consoleError).not.toHaveBeenCalled();
