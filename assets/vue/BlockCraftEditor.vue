@@ -48,7 +48,6 @@ const visibleButtons = computed(() => props.buttons && props.buttons.length ? pr
 // Source (HTML) mode state - see the "Source (HTML) mode" section below.
 const sourceMode = ref(false);
 const sourceHtml = ref('');
-let sourceTimer: ReturnType<typeof setTimeout> | null = null;
 
 function hasButton(name: ToolbarButton): boolean {
     return visibleButtons.value.includes(name);
@@ -98,10 +97,6 @@ watch(() => props.modelValue, (value) => {
 });
 
 onBeforeUnmount(() => {
-    if (sourceTimer) {
-        clearTimeout(sourceTimer);
-    }
-
     // Required inside Tailor/FormController repeaters: a row removed from
     // the DOM must destroy its TipTap instance, or the ProseMirror view and
     // its event listeners leak - see README.md's "Repeater lifecycle" section.
@@ -294,23 +289,17 @@ function runTable(command: TableCommand): void {
 // can't be used to get markup past either.
 
 function applySource(): void {
-    if (sourceTimer) {
-        clearTimeout(sourceTimer);
-        sourceTimer = null;
-    }
-
     editor.value?.commands.setContent(sourceHtml.value, { emitUpdate: true });
 }
 
+// Applied on every keystroke, not debounced: the form's hidden input has to
+// hold what's in the box at the moment the form is saved (October's Ctrl+S
+// can come straight after the last keystroke). The editor is hidden while
+// in source mode, so re-parsing never moves a visible cursor, and ProseMirror's
+// history groups quick successive changes into one undo step.
 function onSourceInput(event: Event): void {
     sourceHtml.value = (event.target as HTMLTextAreaElement).value;
-
-    // Keep the form's hidden input current while typing, so saving without
-    // leaving source mode still saves what's in the box.
-    if (sourceTimer) {
-        clearTimeout(sourceTimer);
-    }
-    sourceTimer = setTimeout(applySource, 300);
+    applySource();
 }
 
 function toggleSource(): void {

@@ -9,7 +9,9 @@
  * tag of a container that holds other blocks, and neither occurs inside a
  * code block's text.
  */
-const BLOCK_CLOSE = /(<\/(?:p|h[1-6]|li|blockquote|pre|table|thead|tbody|tfoot|tr|th|td|ul|ol)>)(?!\n)/g;
+// No newline right before a cell or list item closes (`<td><p>x</p></td>`),
+// so each cell and list item stays on one line.
+const BLOCK_CLOSE = /(<\/(?:p|h[1-6]|li|blockquote|pre|table|thead|tbody|tfoot|tr|th|td|ul|ol)>)(?!\n|<\/(?:td|th|li)>)/g;
 const CONTAINER_OPEN = /(<(?:ul|ol|table|thead|tbody|tfoot|tr|blockquote)(?:\s[^>]*)?>)(?!\n)/g;
 const VOID_BLOCK = /(<(?:hr|img)(?:\s[^>]*)?>)(?!\n)/g;
 

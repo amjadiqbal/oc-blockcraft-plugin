@@ -432,25 +432,22 @@ describe('BlockCraftEditor editing controls', () => {
             expect(consoleError).not.toHaveBeenCalled();
         });
 
-        it('keeps the form value current while typing, without leaving source mode', async () => {
-            vi.useFakeTimers();
+        it('keeps the form value current on every keystroke, without leaving source mode', async () => {
             const wrapper = mount(BlockCraftEditor, {
                 props: { modelValue: '<p>Old</p>' },
                 attachTo: document.body,
             });
-
-            for (let i = 0; i < 20 && !(wrapper.vm as unknown as { editor?: Editor }).editor; i++) {
-                await nextTick();
-            }
-            await nextTick();
+            await waitForEditor(wrapper);
 
             await button(wrapper, 'Edit HTML source').trigger('click');
             await wrapper.find('.blockcraft-source textarea').setValue('<p>Typed in source</p>');
-            vi.advanceTimersByTime(350);
 
+            // Synchronously - no timer has to run before a save picks it up.
             expect(lastEmitted(wrapper)).toBe('<p>Typed in source</p>');
-            vi.useRealTimers();
+            expect((wrapper.vm as unknown as { sourceMode: boolean }).sourceMode).toBe(true);
+
             wrapper.unmount();
+            expect(consoleError).not.toHaveBeenCalled();
         });
 
         it('emits a JSON document from source edits when outputFormat is json', async () => {
@@ -490,7 +487,12 @@ describe('BlockCraftEditor editing controls', () => {
     describe('formatHtml', () => {
         it('puts blocks on their own lines without changing the content', () => {
             expect(formatHtml('<h2>A</h2><ul><li><p>x</p></li></ul><pre><code>a\nb</code></pre>'))
-                .toBe('<h2>A</h2>\n<ul>\n<li><p>x</p>\n</li>\n</ul>\n<pre><code>a\nb</code></pre>');
+                .toBe('<h2>A</h2>\n<ul>\n<li><p>x</p></li>\n</ul>\n<pre><code>a\nb</code></pre>');
+        });
+
+        it('keeps a table cell on one line', () => {
+            expect(formatHtml('<table><tbody><tr><td><p>1</p></td><td><p>2</p></td></tr></tbody></table>'))
+                .toBe('<table>\n<tbody>\n<tr>\n<td><p>1</p></td>\n<td><p>2</p></td>\n</tr>\n</tbody>\n</table>');
         });
 
         it('is idempotent', () => {

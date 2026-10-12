@@ -24,8 +24,9 @@ couldn't be edited at all, and there was no way to edit the raw HTML.
   it. Replacing keeps alt text you wrote; a default alt (the old file name)
   is swapped for the new file's name.
 - **HTML source mode.** A new `HTML` toolbar button switches the editor to
-  its HTML source, one block per line. What you type is applied as you type
-  (so saving while in source mode saves it) and when you switch back.
+  its HTML source, one block per line. What you type is applied on every
+  keystroke, so saving while still in source mode (even with Ctrl+S straight
+  after typing) saves it.
   Anything the editor can't represent is dropped, and the saved value is
   still cleaned by the server-side sanitizer, so source mode can't be used
   to store scripts, styles, event handlers, iframes or `javascript:` links.
