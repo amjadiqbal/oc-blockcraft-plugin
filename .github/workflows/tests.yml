@@ -48,8 +48,18 @@ jobs:
       # (PluginTestCase) and a full application skeleton to autoload real
       # Backend\Classes\FormField / FormWidgetBase against - see README.md's
       # Testing section for why.
+      # October opts out of Composer's advisory block only in the newer
+      # "policy" syntax, which Composer 2.9 ignores, so a plain create-project
+      # aborts on enshrined/svg-sanitize. Add the 2.9-era opt-out, then install.
+      # Same steps as scripts/ci-local.sh.
       - name: Install a throwaway October CMS app
-        run: composer create-project october/october octoberapp --no-interaction --prefer-dist
+        run: |
+          composer create-project october/october octoberapp --no-install --no-scripts --no-interaction --prefer-dist
+          php -r '$f = $argv[1]; $j = json_decode(file_get_contents($f), true); $j["config"]["audit"]["block-insecure"] = false; file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");' octoberapp/composer.json
+          composer install --working-dir=octoberapp --no-interaction --prefer-dist
+          test -f octoberapp/vendor/autoload.php
+          cp octoberapp/.env.example octoberapp/.env
+          php octoberapp/artisan key:generate --no-interaction
 
       # Install from `git archive`, not the checkout: it honours .gitattributes
       # export-ignore, so this is exactly what Packagist ships to customers.

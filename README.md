@@ -30,6 +30,20 @@ drop-in-shaped alternative: a real Vue 3 SFC built on TipTap's ProseMirror
 foundation, with server-side sanitization independent of anything configured
 in the browser.
 
+## Features
+
+- Headings, bold/italic/strike, inline code, lists, blockquotes, code blocks,
+  links and horizontal rules.
+- **Tables you can edit:** add and delete rows and columns, toggle the header
+  row, merge and split cells, delete the table, and resize columns. The
+  controls appear while the cursor is in a table.
+- **Images from October's Media Manager**, editable after inserting: alt text,
+  width, alignment, replace and remove.
+- **HTML source mode** for editing the raw markup, still sanitized on save.
+- Clean HTML or structured TipTap JSON output, sanitized server-side.
+- Works inside Tailor/FormController repeaters, including rows added after the
+  page loaded.
+
 ## Requirements
 
 - October CMS **4.2+** (needs the Vue 3 / native ESM backend)
@@ -64,7 +78,7 @@ body:
 |---|---|---|---|
 | `outputFormat` | `html` \| `json` | `html` | Persisted shape of the field's value. |
 | `height` | string | `400px` | CSS height of the editor's content area. |
-| `buttons` | array \| null | `null` (full default toolbar) | Restrict visible toolbar buttons - see the full list in `formwidgets/BlockCraft.php`'s docblock. |
+| `buttons` | array \| null | `null` (full default toolbar) | Restrict visible toolbar buttons: `bold`, `italic`, `strike`, `code`, `heading1`..`heading6`, `bulletList`, `orderedList`, `blockquote`, `codeBlock`, `link`, `image`, `table`, `horizontalRule`, `undo`, `redo`, `source`. The table and image bars appear on their own and need no entry. |
 | `readOnly` | bool | `false` | Renders the content non-editable. |
 
 `outputFormat: json` stores TipTap's own document schema
@@ -77,13 +91,43 @@ markup, or when you want a stable structure for programmatic transforms.
 Clicking the toolbar's Image button launches October's real, built-in Media
 Manager (`oc.mediaManager.popup`) when the current backend user has
 `media.library` access - no extra setup needed, no custom AJAX handler on
-BlockCraft's side. Selected images can be aligned left/center/right from the
-toolbar once selected in the editor.
+BlockCraft's side. Without that access, the Image button asks for a URL.
+
+### Editing tables and images
+
+Put the cursor in a table and a **Table** bar appears under the toolbar: add
+a row above/below, delete a row, add a column left/right, delete a column,
+toggle the header row, merge cells (drag across cells to select them first),
+split a merged cell, and delete the table. Drag a column border to resize it.
+
+<p align="center">
+  <img src="art/editing-table.png" alt="BlockCraft's Table bar under the toolbar, with two cells of a pricing table selected and Merge enabled" width="650">
+</p>
+
+Click an image and an **Image** bar appears: alt text, width in pixels, align
+left/center/right, replace it (through the Media Manager), and remove it.
+
+<p align="center">
+  <img src="art/editing-image.png" alt="BlockCraft's Image bar for a selected, centered image: alt text, a 240 px width, alignment buttons, Replace and Remove" width="650">
+</p>
+
+### HTML source mode
+
+The **HTML** toolbar button shows the field's content as HTML, one block per
+line, for editing by hand. Changes apply as you type and when you switch
+back. Only HTML the editor supports is kept: unknown tags are unwrapped, and
+scripts, styles, event attributes, iframes and `javascript:` links are
+removed - in the browser, and again on the server when the form is saved
+(see Sanitization). To hide the button, leave `source` out of `buttons`.
+
+<p align="center">
+  <img src="art/editing-source.png" alt="BlockCraft in HTML source mode: the table and image markup, one block per line, with the formatting buttons disabled" width="650">
+</p>
 
 ### Sanitization
 
 Both output modes are sanitized **server-side**, independent of anything the
-browser sent:
+browser sent - including HTML typed in source mode:
 
 - `html` mode: `classes/HtmlSanitizer.php` strips any tag/attribute outside
   an explicit allow-list (matching BlockCraft's own extension set - nothing
@@ -136,8 +180,16 @@ php artisan october:migrate
 vendor/bin/phpunit --configuration path/to/phpunit.blockcraft.xml
 ```
 
-See `.github/workflows/tests.yml` for the exact, working invocation (this is
-literally the same script CI runs).
+`scripts/ci-local.sh` does all of this for you, the same way
+`.github/workflows/tests.yml` does: a fresh October install, the plugin
+installed from `git archive HEAD` (exactly what Packagist ships), PHPUnit,
+plus the TypeScript/Vite job and a check that the committed `assets/dist/`
+matches a fresh build. It tests the last commit, so commit first.
+
+```
+scripts/ci-local.sh                 # both jobs
+JOB=phpunit PHP=php8.2 scripts/ci-local.sh
+```
 
 ## License
 

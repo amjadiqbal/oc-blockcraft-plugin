@@ -192,4 +192,39 @@ class JsonSanitizerTest extends PluginTestCase
 
         $this->assertSame(['type' => 'doc', 'content' => []], $result);
     }
+
+    public function testImageWidthAndAlignAreKeptOnlyWithValidValues()
+    {
+        $doc = ['type' => 'doc', 'content' => [
+            ['type' => 'image', 'attrs' => ['src' => '/a.jpg', 'alt' => 'A', 'width' => 320, 'height' => '240', 'align' => 'center']],
+            ['type' => 'image', 'attrs' => ['src' => '/b.jpg', 'width' => '100px', 'height' => -5, 'align' => 'javascript:alert(1)']],
+        ]];
+
+        $result = $this->sanitizer->clean($doc);
+
+        $this->assertSame(['src' => '/a.jpg', 'alt' => 'A', 'width' => 320, 'height' => '240', 'align' => 'center'], $result['content'][0]['attrs']);
+        $this->assertSame(['src' => '/b.jpg'], $result['content'][1]['attrs']);
+    }
+
+    public function testTableCellColwidthListIsKeptOnlyAsPositiveIntegers()
+    {
+        $cell = fn ($colwidth) => ['type' => 'tableCell', 'attrs' => ['colspan' => 2, 'rowspan' => 1, 'colwidth' => $colwidth],
+            'content' => [['type' => 'paragraph']]];
+
+        $doc = ['type' => 'doc', 'content' => [[
+            'type' => 'table',
+            'content' => [[
+                'type' => 'tableRow',
+                'content' => [$cell([200, 150]), $cell(['200', 'x']), $cell(['a' => 1]), $cell(null)],
+            ]],
+        ]]];
+
+        $cells = $this->sanitizer->clean($doc)['content'][0]['content'][0]['content'];
+
+        $this->assertSame([200, 150], $cells[0]['attrs']['colwidth']);
+        $this->assertArrayNotHasKey('colwidth', $cells[1]['attrs']);
+        $this->assertArrayNotHasKey('colwidth', $cells[2]['attrs']);
+        $this->assertArrayHasKey('colwidth', $cells[3]['attrs']);
+        $this->assertNull($cells[3]['attrs']['colwidth']);
+    }
 }

@@ -44,7 +44,9 @@ class BlockCraft extends FormWidgetBase
      * (the default) shows BlockCraft's full default toolbar. Recognised
      * names: bold, italic, strike, code, heading1..heading6, bulletList,
      * orderedList, blockquote, codeBlock, table, link, image,
-     * horizontalRule, undo, redo.
+     * horizontalRule, undo, redo, source (HTML source mode). The table and
+     * image editing controls appear on their own while a table or image is
+     * selected; they need no entry here.
      */
     public $buttons = null;
 
