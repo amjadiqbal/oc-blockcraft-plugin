@@ -35,7 +35,7 @@ class JsonSanitizer
         'tableRow' => [],
         'tableCell' => ['colspan', 'rowspan', 'colwidth'],
         'tableHeader' => ['colspan', 'rowspan', 'colwidth'],
-        'image' => ['src', 'alt', 'title', 'align'],
+        'image' => ['src', 'alt', 'title', 'align', 'width', 'height'],
     ];
 
     /** @var array<string, string[]> mark type => allowed attrs keys */
@@ -202,9 +202,30 @@ class JsonSanitizer
                 continue;
             }
 
+            // A table cell's column widths are TipTap's one list-valued
+            // attribute (`colwidth: [200, 150]`, one entry per spanned
+            // column). Keep it only as a short list of positive integers.
+            if ($key === 'colwidth') {
+                if ($value === null || $this->isColwidthList($value)) {
+                    $clean[$key] = $value;
+                }
+                continue;
+            }
+
             // Only allow scalar attribute values - objects/resources can't
             // come from a legitimate TipTap doc.
             if (!is_scalar($value) && $value !== null) {
+                continue;
+            }
+
+            if ($key === 'align' && $value !== null && !in_array($value, ['left', 'center', 'right'], true)) {
+                continue;
+            }
+
+            // Numbers when set from the toolbar, numeric strings when TipTap
+            // parsed them from an HTML width="" attribute.
+            if (in_array($key, ['width', 'height'], true) && $value !== null
+                && !((is_int($value) || (is_string($value) && preg_match('/^\d{1,5}$/', $value))) && (int) $value > 0)) {
                 continue;
             }
 
@@ -216,6 +237,21 @@ class JsonSanitizer
         }
 
         return $clean;
+    }
+
+    protected function isColwidthList($value): bool
+    {
+        if (!is_array($value) || !array_is_list($value) || count($value) > 100) {
+            return false;
+        }
+
+        foreach ($value as $width) {
+            if (!is_int($width) || $width < 1 || $width > 99999) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected function isSafeUri(string $value): bool

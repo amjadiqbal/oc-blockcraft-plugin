@@ -1,6 +1,6 @@
 {
   "name": "@amjadiqbal/blockcraft",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "The modern TipTap block editor & document builder for October CMS.",
   "type": "module",
   "private": true,

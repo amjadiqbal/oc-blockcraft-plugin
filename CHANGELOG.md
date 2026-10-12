@@ -4,6 +4,57 @@ All notable changes to this project are documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project uses [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-10-12
+
+Reported by a user: tables couldn't be edited after inserting them, images
+couldn't be edited at all, and there was no way to edit the raw HTML.
+
+### Added
+
+- **Table editing.** While the cursor is in a table, a "Table" bar appears
+  under the toolbar: add a row above or below, delete a row, add a column
+  left or right, delete a column, toggle the header row, merge selected
+  cells (drag across cells to select them), split a merged cell, and delete
+  the table. Buttons that don't apply are disabled. Previously the editor
+  had these commands but no way to reach them.
+- **Image editing after inserting.** Click an image and an "Image" bar
+  appears: alt text, width in pixels (blank for the natural size), align
+  left/center/right (click again to clear), replace it through October's
+  Media Manager (or a URL prompt without Media Manager access), and remove
+  it. Replacing keeps alt text you wrote; a default alt (the old file name)
+  is swapped for the new file's name.
+- **HTML source mode.** A new `HTML` toolbar button switches the editor to
+  its HTML source, one block per line. What you type is applied as you type
+  (so saving while in source mode saves it) and when you switch back.
+  Anything the editor can't represent is dropped, and the saved value is
+  still cleaned by the server-side sanitizer, so source mode can't be used
+  to store scripts, styles, event handlers, iframes or `javascript:` links.
+  Leave `source` out of the `buttons` option to hide it.
+- `scripts/ci-local.sh` runs the same two jobs as `.github/workflows/tests.yml`
+  on your own machine.
+
+### Fixed
+
+- **Image alignment was lost on save.** The editor stored it in
+  `data-align`, which `HtmlSanitizer` stripped, and only read it back from
+  there, so an aligned image came back unaligned after a reload. The
+  sanitizer now keeps `data-align` (`left`, `center` or `right` only), and
+  the editor also reads the `blockcraft-image-align-*` class, so images
+  aligned with 0.1.x come back aligned.
+- **Resized table columns were lost on save.** The sanitizers now keep a
+  cell's `colwidth` (numbers only), in both HTML and JSON mode.
+- JSON mode now keeps an image's `width`/`height` (positive numbers only).
+- The CI workflow's October install now uses the Composer advisory-block
+  workaround, without which `composer create-project october/october`
+  currently fails.
+
+### A note on "voidTags"
+
+There was never a disabled source button. `voidTags` in
+`HtmlSanitizer::selfCloseVoidElements()` is a list of HTML elements that
+never have content (`img`, `br`, `hr`, ...). The `source` in it is HTML's
+`<source>` element (used inside `<video>` and `<picture>`), not a button.
+
 ## [0.1.2] - 2026-10-10
 
 ### Fixed

@@ -114,3 +114,120 @@
     display: block;
     margin: 0.5em auto;
 }
+
+/* The fieldset only exists so source mode can disable every formatting button at once. */
+.blockcraft-toolbar-group {
+    display: contents;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.blockcraft-toolbar button:disabled,
+.blockcraft-contextbar button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    background: transparent;
+}
+
+/* Contextual bar: table controls while the cursor is in a table, image controls while an image is selected. */
+.blockcraft-contextbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 4px;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--field-border-color, #d8dde6);
+    background: var(--field-bg-color, #fff);
+    font-size: 13px;
+}
+
+.blockcraft-contextbar-label {
+    font-weight: 600;
+    margin-right: 6px;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+}
+
+.blockcraft-contextbar button {
+    border: 1px solid var(--field-border-color, #d8dde6);
+    background: transparent;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
+    color: inherit;
+}
+
+.blockcraft-contextbar button:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.blockcraft-contextbar button.is-active {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.blockcraft-contextbar button.is-danger {
+    color: #c0392b;
+}
+
+.blockcraft-contextbar-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 6px 0 0;
+    font-weight: normal;
+}
+
+.blockcraft-contextbar-field input {
+    border: 1px solid var(--field-border-color, #d8dde6);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 12px;
+    width: 220px;
+}
+
+.blockcraft-contextbar-field input.is-narrow {
+    width: 70px;
+}
+
+.blockcraft-content .ProseMirror .selectedCell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(80, 130, 230, 0.15);
+    pointer-events: none;
+}
+
+.blockcraft-content .ProseMirror img.ProseMirror-selectednode {
+    outline: 2px solid #5082e6;
+}
+
+/* Source (HTML) mode */
+.blockcraft-source textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    padding: 12px 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    background: var(--field-bg-color, #fff);
+    color: inherit;
+}
+
+.blockcraft-source-hint {
+    margin: 0;
+    padding: 6px 14px;
+    font-size: 12px;
+    opacity: 0.7;
+    border-top: 1px solid var(--field-border-color, #d8dde6);
+}

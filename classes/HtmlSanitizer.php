@@ -39,14 +39,31 @@ class HtmlSanitizer
         'ul' => [], 'ol' => ['start'],
         'li' => [],
         'a' => ['href', 'title', 'target', 'rel'],
-        'img' => ['src', 'alt', 'title', 'class', 'width', 'height'],
+        'img' => ['src', 'alt', 'title', 'class', 'width', 'height', 'data-align'],
         'hr' => [],
         'br' => [],
         'table' => [],
         'thead' => [], 'tbody' => [], 'tfoot' => [],
         'tr' => [],
-        'th' => ['colspan', 'rowspan'],
-        'td' => ['colspan', 'rowspan'],
+        'th' => ['colspan', 'rowspan', 'colwidth'],
+        'td' => ['colspan', 'rowspan', 'colwidth'],
+    ];
+
+    /**
+     * @var array<string, string> attribute => pattern its whole value must
+     * match, or the attribute is dropped. These are the attributes the
+     * editor's table and image controls write (column widths, image
+     * width/alignment); each only ever holds a number, a list of numbers, or
+     * one of three words, so anything else didn't come from the editor.
+     */
+    protected array $attributePatterns = [
+        'colspan' => '/^\d{1,3}$/',
+        'rowspan' => '/^\d{1,3}$/',
+        'colwidth' => '/^\d{1,5}(,\d{1,5})*$/',
+        'width' => '/^\d{1,5}%?$/',
+        'height' => '/^\d{1,5}%?$/',
+        'data-align' => '/^(left|center|right)$/',
+        'start' => '/^\d{1,9}$/',
     ];
 
     /**
@@ -197,6 +214,11 @@ class HtmlSanitizer
             }
 
             if (in_array($name, ['href', 'src'], true) && !$this->isSafeUri($attr->value)) {
+                $element->removeAttribute($attr->name);
+                continue;
+            }
+
+            if (isset($this->attributePatterns[$name]) && !preg_match($this->attributePatterns[$name], trim($attr->value))) {
                 $element->removeAttribute($attr->name);
             }
         }
