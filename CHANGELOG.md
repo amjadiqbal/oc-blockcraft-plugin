@@ -40,8 +40,9 @@ couldn't be edited at all, and there was no way to edit the raw HTML.
   `data-align`, which `HtmlSanitizer` stripped, and only read it back from
   there, so an aligned image came back unaligned after a reload. The
   sanitizer now keeps `data-align` (`left`, `center` or `right` only), and
-  the editor also reads the `blockcraft-image-align-*` class, so images
-  aligned with 0.1.x come back aligned.
+  the editor also reads the `blockcraft-image-align-*` class that 0.1.x did
+  keep, so an image aligned in 0.1.x loads aligned. One that 0.1.x already
+  saved a second time lost the class too; set its alignment again.
 - **Resized table columns were lost on save.** The sanitizers now keep a
   cell's `colwidth` (numbers only), in both HTML and JSON mode.
 - JSON mode now keeps an image's `width`/`height` (positive numbers only).
