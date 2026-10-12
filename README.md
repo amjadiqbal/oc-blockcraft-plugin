@@ -100,8 +100,16 @@ a row above/below, delete a row, add a column left/right, delete a column,
 toggle the header row, merge cells (drag across cells to select them first),
 split a merged cell, and delete the table. Drag a column border to resize it.
 
+<p align="center">
+  <img src="art/editing-table.png" alt="BlockCraft's Table bar under the toolbar, with two cells of a pricing table selected and Merge enabled" width="650">
+</p>
+
 Click an image and an **Image** bar appears: alt text, width in pixels, align
 left/center/right, replace it (through the Media Manager), and remove it.
+
+<p align="center">
+  <img src="art/editing-image.png" alt="BlockCraft's Image bar for a selected, centered image: alt text, a 240 px width, alignment buttons, Replace and Remove" width="650">
+</p>
 
 ### HTML source mode
 
@@ -111,6 +119,10 @@ back. Only HTML the editor supports is kept: unknown tags are unwrapped, and
 scripts, styles, event attributes, iframes and `javascript:` links are
 removed - in the browser, and again on the server when the form is saved
 (see Sanitization). To hide the button, leave `source` out of `buttons`.
+
+<p align="center">
+  <img src="art/editing-source.png" alt="BlockCraft in HTML source mode: the table and image markup, one block per line, with the formatting buttons disabled" width="650">
+</p>
 
 ### Sanitization
 
