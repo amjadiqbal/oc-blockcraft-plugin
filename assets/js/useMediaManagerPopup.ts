@@ -24,12 +24,18 @@ export interface MediaManagerItem {
     thumbUrl: string;
 }
 
+interface MediaManagerPopupInstance {
+    hide(): void;
+}
+
 interface MediaManagerPopupOptions {
     alias: string;
     mediaFolder?: string | null;
     bottomToolbar?: boolean;
     cropAndInsertButton?: boolean;
-    onInsert?: (items: MediaManagerItem[]) => void;
+    // October calls these with the popup instance as `this`
+    // (`this.options.onInsert.call(this, items)` in mediamanager.popup.js).
+    onInsert?: (this: MediaManagerPopupInstance, items: MediaManagerItem[]) => void;
     onClose?: () => void;
 }
 
@@ -70,6 +76,12 @@ export function openMediaManager(): Promise<MediaManagerItem | null> {
             onInsert(items) {
                 inserted = true;
                 resolve(items[0] ?? null);
+
+                // The popup doesn't close itself on Insert: insertMedia()
+                // only calls onInsert, and every caller in October's own
+                // source hides it there. Before 0.2.0 BlockCraft didn't,
+                // so the popup stayed open over the editor after inserting.
+                this.hide();
             },
             onClose() {
                 if (!inserted) {

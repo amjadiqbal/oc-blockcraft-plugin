@@ -44,6 +44,10 @@ couldn't be edited at all, and there was no way to edit the raw HTML.
 - **Resized table columns were lost on save.** The sanitizers now keep a
   cell's `colwidth` (numbers only), in both HTML and JSON mode.
 - JSON mode now keeps an image's `width`/`height` (positive numbers only).
+- **The Media Manager stayed open after inserting an image.** October's popup
+  doesn't close itself on Insert; the caller has to. BlockCraft now does.
+- Column borders now show a resize handle and cursor, so resizing is
+  discoverable.
 - The CI workflow's October install now uses the Composer advisory-block
   workaround, without which `composer create-project october/october`
   currently fails.

@@ -310,8 +310,10 @@ describe('BlockCraftEditor editing controls', () => {
         });
 
         it('replaces the image through the Media Manager, keeping custom alt text', async () => {
-            const popup = vi.fn().mockImplementation((options: { onInsert: (items: unknown[]) => void }) => {
-                options.onInsert([{ documentType: 'image', publicUrl: '/storage/app/media/new.jpg', title: 'new.jpg' }]);
+            const hide = vi.fn();
+            const popup = vi.fn().mockImplementation((options: { onInsert: (this: { hide: () => void }, items: unknown[]) => void }) => {
+                // October calls onInsert with the popup as `this`.
+                options.onInsert.call({ hide }, [{ documentType: 'image', publicUrl: '/storage/app/media/new.jpg', title: 'new.jpg' }]);
             });
             (window as unknown as { oc: unknown }).oc = { mediaManager: { popup } };
 
@@ -327,6 +329,7 @@ describe('BlockCraftEditor editing controls', () => {
             await settle();
 
             expect(popup).toHaveBeenCalledTimes(1);
+            expect(hide).toHaveBeenCalledTimes(1);
             expect(lastEmitted(wrapper)).toContain('src="/storage/app/media/new.jpg"');
             expect(lastEmitted(wrapper)).toContain('alt="A red bicycle"');
 
